@@ -1,7 +1,7 @@
 <template>
   <div class="new-room-form">
-    <form>
-      <input type="text" placeholder="NewRoomForm" required />
+    <form @submit.prevent="createRoomHandler()">
+      <input type="text" placeholder="NewRoomForm" v-model="roomName" required />
       <button id="create-room-btn" type="submit">+</button>
     </form>
   </div>
@@ -11,13 +11,24 @@ export default {
   name: 'NewRoomForm',
   data () {
     return {
-
+      roomName: ''
     }
   },
-  components: {
-
+  props: {
+    createRoom: {
+      type: Function
+    }
+  },
+  methods: {
+    createRoomHandler (e) {
+      this.createRoom(this.roomName)
+      this.roomName = ''
+    }
   }
 }
 </script>
 <style lang="css" scoped>
+input {
+  width: 140px;
+}
 </style>

@@ -1,7 +1,12 @@
 <template>
   <div class="send-message-form">
-    <form @submit="submitHandler" className="send-message-form">
-      <input v-model="message" placeholder="Type you message and hit ENTER" type="text" />
+    <form @submit.prevent="submitHandler" className="send-message-form">
+      <input
+        v-model="message"
+        placeholder="Type you message and hit ENTER"
+        type="text"
+        :disabled="disabled"
+      />
     </form>
   </div>
 </template>
@@ -16,11 +21,14 @@ export default {
   props: {
     sendMessage: {
       type: Function
+    },
+    disabled: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
     submitHandler (e) {
-      e.preventDefault()
       this.sendMessage(this.message)
       this.message = ''
     }

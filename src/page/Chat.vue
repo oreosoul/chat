@@ -1,14 +1,22 @@
 <template>
  <div class="chat">
-   <room-list
+  <room-list
+    :roomId="roomId"
     :subscribeToRoom="subscribeToRoom"
     :rooms="rooms"
-   ></room-list>
-   <message-list
+  ></room-list>
+  <message-list
+    :currentUser="currentUser"
+    :roomId="roomId"
     :messages="messages"
-   ></message-list>
-   <new-room-form></new-room-form>
-   <send-message-form :sendMessage="sendMessage"></send-message-form>
+  ></message-list>
+  <new-room-form
+    :createRoom="createRoom"
+  ></new-room-form>
+  <send-message-form
+    :disabled="!roomId"
+    :sendMessage="sendMessage"
+  ></send-message-form>
  </div>
 </template>
 <script>
@@ -37,6 +45,17 @@ export default {
     NewRoomForm
   },
   methods: {
+    createRoom (name, isPrivate = false, addUserIds = []) {
+      this.currentUser.createRoom({
+        name,
+        private: isPrivate,
+        addUserIds
+      }).then(room => {
+        this.subscribeToRoom(room.id)
+      }).catch(err => {
+        console.error('Error on creating room:', err)
+      })
+    },
     sendMessage (text) {
       this.currentUser.sendMessage({
         text,

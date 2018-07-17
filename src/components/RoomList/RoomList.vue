@@ -2,7 +2,7 @@
   <div class="room-list">
     <h3>Your Rooms:</h3>
     <ul>
-      <li class="room" v-for="(room, index) in rooms" :key="index">
+      <li class="room" :class="{'active':isActiveRoom(room)}" v-for="(room, index) in orderRooms" :key="index">
         <a @click="subscribeToRoom(room.id)" href="#"># {{room.name}}</a>
       </li>
     </ul>
@@ -17,6 +17,10 @@ export default {
     }
   },
   props: {
+    roomId: {
+      type: Number,
+      default: null
+    },
     rooms: {
       type: Array,
       default: () => []
@@ -25,8 +29,15 @@ export default {
       type: Function
     }
   },
-  components: {
-
+  methods: {
+    isActiveRoom (room) {
+      return this.roomId === room.id
+    }
+  },
+  computed: {
+    orderRooms () {
+      return this.rooms.slice(0).sort((a, b) => a.id - b.id)
+    }
   }
 }
 </script>
